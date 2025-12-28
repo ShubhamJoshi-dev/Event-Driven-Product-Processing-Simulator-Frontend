@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import AddProductForm from '@/components/AddProductForm'
 import FlowDiagram from '@/components/FlowDiagram'
 
@@ -162,13 +163,13 @@ export default function Home() {
                       <h4 className="text-white font-semibold text-sm mb-3">Flow Steps</h4>
                       <div className="space-y-2">
                         {[
-                          { id: 0, name: 'User', icon: '👤' },
-                          { id: 1, name: 'API Gateway', icon: '🚪' },
-                          { id: 2, name: 'Lambda', icon: '⚡' },
-                          { id: 3, name: 'SQS', icon: '📬' },
-                          { id: 4, name: 'Lambda', icon: '⚡' },
-                          { id: 5, name: 'DynamoDB', icon: '💾' },
-                          { id: 6, name: 'SNS', icon: '📢' },
+                          { id: 0, name: 'User', iconSrc: null },
+                          { id: 1, name: 'API Gateway', iconSrc: '/images/amazon_api_gateway.jpeg' },
+                          { id: 2, name: 'Lambda', iconSrc: '/images/amazon_lambda.png' },
+                          { id: 3, name: 'SQS', iconSrc: '/images/amazon_sqs.png' },
+                          { id: 4, name: 'Lambda', iconSrc: '/images/amazon_lambda.png' },
+                          { id: 5, name: 'DynamoDB', iconSrc: '/images/amazon_dynamo_db.jpeg' },
+                          { id: 6, name: 'SNS', iconSrc: '/images/amazon_sns.jpeg' },
                         ].map((step, index) => {
                           const isActive = currentStepInfo && currentStepInfo.step === step.id
                           const isCompleted = currentStepInfo && currentStepInfo.step > step.id
@@ -201,16 +202,54 @@ export default function Home() {
                                     : 'bg-slate-800/50 border border-slate-700'
                                 }`}
                               >
-                                <div
-                                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all duration-300 ${
-                                    isActive
-                                      ? 'bg-blue-500 text-white scale-110'
-                                      : isCompleted
-                                      ? 'bg-green-500 text-white'
-                                      : 'bg-slate-700 text-slate-400'
-                                  }`}
-                                >
-                                  {isCompleted ? '✓' : step.icon}
+                                <div className="relative">
+                                  {step.iconSrc ? (
+                                    <motion.div
+                                      className={`w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center transition-all duration-300 ${
+                                        isActive
+                                          ? 'scale-110'
+                                          : isCompleted
+                                          ? ''
+                                          : 'opacity-50'
+                                      }`}
+                                      animate={
+                                        isActive
+                                          ? {
+                                              boxShadow: [
+                                                '0 0 0 0 rgba(59, 130, 246, 0.5)',
+                                                '0 0 15px 5px rgba(59, 130, 246, 0.8)',
+                                                '0 0 0 0 rgba(59, 130, 246, 0.5)',
+                                              ],
+                                            }
+                                          : {}
+                                      }
+                                      transition={{
+                                        duration: 1.5,
+                                        repeat: isActive ? Infinity : 0,
+                                        ease: 'easeInOut',
+                                      }}
+                                    >
+                                      <Image
+                                        src={step.iconSrc}
+                                        alt={step.name}
+                                        width={32}
+                                        height={32}
+                                        className="object-contain"
+                                      />
+                                    </motion.div>
+                                  ) : (
+                                    <div
+                                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all duration-300 ${
+                                        isActive
+                                          ? 'bg-blue-500 text-white scale-110'
+                                          : isCompleted
+                                          ? 'bg-green-500 text-white'
+                                          : 'bg-slate-700 text-slate-400'
+                                      }`}
+                                    >
+                                      {isCompleted ? '✓' : '👤'}
+                                    </div>
+                                  )}
                                 </div>
                                 <div className="flex-1">
                                   <div
