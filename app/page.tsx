@@ -167,6 +167,14 @@ export default function Home() {
           </h1>
         </motion.div>
         <motion.div
+          className="flex justify-center mt-2"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
+          <p className="text-slate-400 text-xs">Done by Shubham Joshi</p>
+        </motion.div>
+        <motion.div
           className="flex justify-center mt-4"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -527,7 +535,8 @@ export default function Home() {
       </div>
 
       <footer className="relative z-10 text-center text-slate-400 text-sm py-4">
-        <p>Simulation only - No real AWS calls are made</p>
+        <p>Simulation only - AWS calls are made</p>
+        <p className="mt-2 text-xs text-slate-500">Done by Shubham Joshi</p>
       </footer>
 
       {showDiagram && (
