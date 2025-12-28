@@ -88,54 +88,34 @@ export default function FlowDiagram({ isActive, onComplete, onStepChange }: Flow
       return
     }
 
-    const delays = [0, 800, 2000, 3500, 5500, 7500, 9500]
-    
     const timers: NodeJS.Timeout[] = []
     
-    delays.forEach((delay, index) => {
+    const stepConfig = [
+      { delay: 0, step: 0, name: 'User Request', desc: 'user' },
+      { delay: 800, step: 1, name: 'API Gateway', desc: 'apiGateway' },
+      { delay: 2000, step: 2, name: 'Lambda Function (Processing)', desc: 'lambda1' },
+      { delay: 3500, step: 3, name: 'SQS Queue', desc: 'sqs' },
+      { delay: 5500, step: 4, name: 'Lambda Function (Consumer)', desc: 'lambda2' },
+      { delay: 6500, step: 5, name: 'DynamoDB', desc: 'dynamodb' },
+      { delay: 7500, step: 6, name: 'SNS Notification', desc: 'sns' },
+    ]
+    
+    stepConfig.forEach(({ delay, step, name, desc }) => {
       const timer = setTimeout(() => {
-        setCurrentStep(index)
-        
-        if (onStepChange) {
-          let stepName = 'Ready'
-          let description: string | null = null
-          
-          if (index === 0) {
-            stepName = 'User Request'
-            description = stepDescriptions['user']
-          } else if (index === 1) {
-            stepName = 'API Gateway'
-            description = stepDescriptions['apiGateway']
-          } else if (index === 2) {
-            stepName = 'Lambda Function (Processing)'
-            description = stepDescriptions['lambda1']
-          } else if (index === 3) {
-            stepName = 'SQS Queue'
-            description = stepDescriptions['sqs']
-          } else if (index === 4) {
-            stepName = 'Lambda Function (Consumer)'
-            description = stepDescriptions['lambda2']
-          } else if (index === 5) {
-            stepName = 'DynamoDB'
-            description = stepDescriptions['dynamodb']
-          } else if (index === 6) {
-            stepName = 'SNS Notification'
-            description = stepDescriptions['sns']
-          }
-          
-          if (description) {
-            onStepChange(index, stepName, description)
-          }
-        }
-        
-        if (index === delays.length - 1) {
-          setTimeout(() => {
-            onComplete()
-          }, 2000)
+        setCurrentStep(step)
+        if (onStepChange && stepDescriptions[desc]) {
+          onStepChange(step, name, stepDescriptions[desc])
         }
       }, delay)
       timers.push(timer)
     })
+    
+    const completionTimer = setTimeout(() => {
+      if (onComplete) {
+        onComplete()
+      }
+    }, 9000)
+    timers.push(completionTimer)
     
     return () => {
       timers.forEach(timer => clearTimeout(timer))
@@ -193,7 +173,7 @@ export default function FlowDiagram({ isActive, onComplete, onStepChange }: Flow
           x2={nodePositions.lambda2.x}
           y2={nodePositions.lambda2.y}
           isActive={isActive && currentStep >= 4}
-          delay={3500}
+          delay={5500}
         />
 
         <AnimatedEdge
@@ -202,7 +182,7 @@ export default function FlowDiagram({ isActive, onComplete, onStepChange }: Flow
           x2={nodePositions.dynamodb.x}
           y2={nodePositions.dynamodb.y}
           isActive={isActive && currentStep >= 5}
-          delay={5500}
+          delay={6500}
         />
 
         <AnimatedEdge
@@ -349,7 +329,7 @@ export default function FlowDiagram({ isActive, onComplete, onStepChange }: Flow
         y={nodePositions.sns.y}
         isActive={isNodeActive('sns')}
         status={getNodeStatus('sns')}
-        glowColor="rgba(34, 197, 94, 0.5)"
+        glowColor="rgba(255, 215, 0, 0.8)"
       />
 
       {isNodeActive('sqs') && (
@@ -381,7 +361,7 @@ export default function FlowDiagram({ isActive, onComplete, onStepChange }: Flow
         </motion.div>
       )}
 
-      {isNodeActive('dynamodb') && (
+      {isNodeActive('dynamodb') && currentStep === 5 && (
         <motion.div
           className="absolute"
           style={{
@@ -398,7 +378,7 @@ export default function FlowDiagram({ isActive, onComplete, onStepChange }: Flow
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{
-                delay: 7.5 + i * 0.2,
+                delay: i * 0.2,
                 duration: 0.3,
               }}
             />
@@ -406,7 +386,7 @@ export default function FlowDiagram({ isActive, onComplete, onStepChange }: Flow
         </motion.div>
       )}
 
-      {isNodeActive('sns') && (
+      {isNodeActive('sns') && currentStep === 6 && (
         <motion.div
           className="absolute"
           style={{
@@ -415,24 +395,25 @@ export default function FlowDiagram({ isActive, onComplete, onStepChange }: Flow
             transform: 'translate(-50%, -50%)',
           }}
         >
-          {[0, 1, 2].map((i) => (
+          {[0, 1].map((i) => (
             <motion.div
               key={i}
-              className="absolute w-32 h-32 border-2 border-green-400 rounded-full"
+              className="absolute w-32 h-32 border-2 border-yellow-400 rounded-full"
               style={{
                 left: '50%',
                 top: '50%',
                 transform: 'translate(-50%, -50%)',
               }}
-              initial={{ scale: 0.5, opacity: 0.8 }}
+              initial={{ scale: 0.5, opacity: 0.6 }}
               animate={{
-                scale: [1, 2, 2.5],
-                opacity: [0.8, 0.4, 0],
+                scale: [1, 1.8],
+                opacity: [0.6, 0],
               }}
               transition={{
-                delay: 9.5 + i * 0.5,
-                duration: 1.5,
-                repeat: currentStep >= 6 ? Infinity : 0,
+                delay: i * 0.4,
+                duration: 1,
+                repeat: Infinity,
+                repeatDelay: 0.5,
                 ease: 'easeOut',
               }}
             />

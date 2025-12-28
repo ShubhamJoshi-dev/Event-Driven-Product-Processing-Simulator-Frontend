@@ -46,17 +46,12 @@ export default function AwsNode({
         `}
         animate={{
           boxShadow: isActive
-            ? [
-                `0 0 0 0 ${glowColor}`,
-                `0 0 20px 5px ${glowColor}`,
-                `0 0 0 0 ${glowColor}`,
-              ]
+            ? `0 0 20px 5px ${glowColor}`
             : '0 4px 6px rgba(0, 0, 0, 0.3)',
         }}
         transition={{
-          duration: 1.5,
-          repeat: isActive ? Infinity : 0,
-          ease: 'easeInOut',
+          duration: 0.3,
+          ease: 'easeOut',
         }}
       >
         <div className="flex items-center justify-center mb-2">

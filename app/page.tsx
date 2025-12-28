@@ -24,7 +24,7 @@ export default function Home() {
     
     setTimeout(() => {
       setIsLoading(false)
-    }, 12000)
+    }, 10000)
   }
 
   const handleFlowComplete = () => {
@@ -99,12 +99,103 @@ export default function Home() {
 
             {showSuccess && (
               <motion.div
-                className="mt-4 p-4 bg-green-500/20 border border-green-500 rounded-lg text-green-400 text-center"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={handleReset}
               >
-                ✓ Product added successfully!
+                <motion.div
+                  className="bg-gradient-to-br from-green-900/95 to-emerald-900/95 backdrop-blur-md border-2 border-green-500 rounded-2xl p-8 shadow-2xl max-w-md mx-4 relative overflow-hidden"
+                  initial={{ scale: 0.5, opacity: 0, y: 50 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  transition={{ 
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 25
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 via-transparent to-green-500/20 animate-pulse"></div>
+                  
+                  <div className="relative z-10 text-center">
+                    <motion.div
+                      className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                    >
+                      <motion.svg
+                        width="48"
+                        height="48"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                      >
+                        <motion.path
+                          d="M20 6L9 17l-5-5"
+                          stroke="white"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          initial={{ pathLength: 0 }}
+                          animate={{ pathLength: 1 }}
+                          transition={{ duration: 0.5, delay: 0.4 }}
+                        />
+                      </motion.svg>
+                    </motion.div>
+                    
+                    <motion.h3
+                      className="text-2xl font-bold text-white mb-2"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      Success!
+                    </motion.h3>
+                    
+                    <motion.p
+                      className="text-green-200 text-lg mb-6"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                    >
+                      Product is successfully added at DynamoDB
+                    </motion.p>
+                    
+                    <motion.button
+                      onClick={handleReset}
+                      className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Close
+                    </motion.button>
+                  </div>
+                  
+                  {[0, 1, 2].map((i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute w-full h-full border-2 border-green-400 rounded-2xl"
+                      initial={{ scale: 1, opacity: 0.6 }}
+                      animate={{
+                        scale: [1, 1.1, 1.2],
+                        opacity: [0.6, 0.3, 0],
+                      }}
+                      transition={{
+                        delay: 0.6 + i * 0.3,
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: 'easeOut',
+                      }}
+                    />
+                  ))}
+                </motion.div>
               </motion.div>
             )}
           </div>
@@ -204,30 +295,14 @@ export default function Home() {
                               >
                                 <div className="relative">
                                   {step.iconSrc ? (
-                                    <motion.div
+                                    <div
                                       className={`w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center transition-all duration-300 ${
                                         isActive
-                                          ? 'scale-110'
+                                          ? 'scale-110 shadow-lg shadow-blue-500/50'
                                           : isCompleted
                                           ? ''
                                           : 'opacity-50'
                                       }`}
-                                      animate={
-                                        isActive
-                                          ? {
-                                              boxShadow: [
-                                                '0 0 0 0 rgba(59, 130, 246, 0.5)',
-                                                '0 0 15px 5px rgba(59, 130, 246, 0.8)',
-                                                '0 0 0 0 rgba(59, 130, 246, 0.5)',
-                                              ],
-                                            }
-                                          : {}
-                                      }
-                                      transition={{
-                                        duration: 1.5,
-                                        repeat: isActive ? Infinity : 0,
-                                        ease: 'easeInOut',
-                                      }}
                                     >
                                       <Image
                                         src={step.iconSrc}
@@ -236,7 +311,7 @@ export default function Home() {
                                         height={32}
                                         className="object-contain"
                                       />
-                                    </motion.div>
+                                    </div>
                                   ) : (
                                     <div
                                       className={`w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all duration-300 ${
