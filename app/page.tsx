@@ -215,7 +215,7 @@ export default function Home() {
                 onClick={handleReset}
               >
                 <motion.div
-                  className="bg-gradient-to-br from-green-900/95 to-emerald-900/95 backdrop-blur-md border-2 border-green-500 rounded-2xl p-8 shadow-2xl max-w-md mx-4 relative overflow-hidden"
+                  className="bg-gradient-to-br from-green-900/95 to-emerald-900/95 backdrop-blur-md border-2 border-green-500 rounded-2xl p-6 sm:p-8 shadow-2xl max-w-lg w-full mx-4 relative overflow-hidden"
                   initial={{ scale: 0.5, opacity: 0, y: 50 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   transition={{ 
@@ -276,32 +276,32 @@ export default function Home() {
                     
                     {productData && (
                       <motion.div
-                        className="bg-slate-900/50 rounded-lg p-4 mb-6 border border-slate-700 text-left"
+                        className="bg-slate-900/50 rounded-lg p-4 mb-6 border border-slate-700 text-left max-w-full"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
                       >
                         <h4 className="text-white font-semibold mb-3 text-sm">Product Details:</h4>
-                        <div className="space-y-2 text-sm">
-                          <div className="flex justify-between">
-                            <span className="text-slate-400">Product ID:</span>
-                            <span className="text-green-300 font-mono text-xs break-all">{productData.product_id}</span>
+                        <div className="space-y-3 text-sm">
+                          <div className="flex flex-col gap-1">
+                            <span className="text-slate-400 text-xs">Product ID:</span>
+                            <span className="text-green-300 font-mono text-xs break-all word-break break-all overflow-wrap break-word">{productData.product_id}</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-400">Name:</span>
-                            <span className="text-white">{productData.product_name}</span>
+                          <div className="flex flex-col gap-1">
+                            <span className="text-slate-400 text-xs">Name:</span>
+                            <span className="text-white break-words overflow-wrap break-word">{productData.product_name}</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-400">Price:</span>
+                          <div className="flex flex-col gap-1">
+                            <span className="text-slate-400 text-xs">Price:</span>
                             <span className="text-white">${productData.product_price}</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-400">Description:</span>
-                            <span className="text-white text-right max-w-[60%] break-words">{productData.product_description}</span>
+                          <div className="flex flex-col gap-1">
+                            <span className="text-slate-400 text-xs">Description:</span>
+                            <span className="text-white break-words overflow-wrap break-word">{productData.product_description}</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-400">Created At:</span>
-                            <span className="text-white text-xs">{new Date(productData.created_at).toLocaleString()}</span>
+                          <div className="flex flex-col gap-1">
+                            <span className="text-slate-400 text-xs">Created At:</span>
+                            <span className="text-white text-xs break-words">{new Date(productData.created_at).toLocaleString()}</span>
                           </div>
                         </div>
                       </motion.div>
