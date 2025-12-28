@@ -57,7 +57,7 @@ export default function FlowDiagram({ isActive, onComplete, onStepChange }: Flow
     { id: 'sqs', label: 'SQS Queue', status: 'Message published to SQS', active: false },
     { id: 'lambda2', label: 'Lambda Function', status: 'Processing message', active: false },
     { id: 'dynamodb', label: 'DynamoDB', status: 'Data stored', active: false },
-    { id: 'sns', label: 'SNS Notification', status: 'Order placed successfully – notification sent', active: false },
+    { id: 'sns', label: 'SNS Notification', status: 'Product added successfully – notification sent', active: false },
   ]
 
   const getCurrentStepDescription = () => {

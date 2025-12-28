@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import AddProductForm from '@/components/AddProductForm'
@@ -10,6 +10,7 @@ export default function Home() {
   const [isFlowActive, setIsFlowActive] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [showDiagram, setShowDiagram] = useState(false)
   const [currentStepInfo, setCurrentStepInfo] = useState<{
     step: number
     name: string
@@ -43,6 +44,18 @@ export default function Home() {
     setCurrentStepInfo({ step, name: stepName, description })
   }, [])
 
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showDiagram) {
+        setShowDiagram(false)
+      }
+    }
+    if (showDiagram) {
+      window.addEventListener('keydown', handleEscape)
+      return () => window.removeEventListener('keydown', handleEscape)
+    }
+  }, [showDiagram])
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
       <div
@@ -73,8 +86,27 @@ export default function Home() {
             <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l8 4v8.64l-8 4-8-4V8.18l8-4z" />
           </svg>
           <h1 className="text-3xl font-bold text-white drop-shadow-lg">
-            Serverless Order Flow Simulator
+            Serverless Add Product Flow Simulator
           </h1>
+        </motion.div>
+        <motion.div
+          className="flex justify-center mt-4"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <motion.button
+            onClick={() => setShowDiagram(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <line x1="9" y1="3" x2="9" y2="21"/>
+            </svg>
+            Show Image Diagram
+          </motion.button>
         </motion.div>
       </header>
 
@@ -385,6 +417,90 @@ export default function Home() {
       <footer className="relative z-10 text-center text-slate-400 text-sm py-4">
         <p>Simulation only - No real AWS calls are made</p>
       </footer>
+
+      {showDiagram && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setShowDiagram(false)}
+        >
+          <motion.div
+            className="relative bg-slate-900 rounded-2xl shadow-2xl max-w-6xl max-h-[90vh] mx-4 overflow-hidden border-2 border-blue-500/50"
+            initial={{ scale: 0.7, opacity: 0, y: 50 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.7, opacity: 0, y: 50 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 30
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-purple-900/20"></div>
+            
+            <div className="relative z-10 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="9" y1="3" x2="9" y2="21"/>
+                  </svg>
+                  AWS Serverless Architecture Diagram
+                </h2>
+                <motion.button
+                  onClick={() => setShowDiagram(false)}
+                  className="text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-slate-800"
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </motion.button>
+              </div>
+              
+              <motion.div
+                className="relative bg-slate-800 rounded-lg overflow-hidden border border-slate-700"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-purple-500/10 animate-pulse"></div>
+                <div className="relative p-4 flex items-center justify-center max-h-[75vh] overflow-auto">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                  >
+                    <Image
+                      src="/flow.png"
+                      alt="AWS Serverless Add Product Flow Diagram"
+                      width={1200}
+                      height={800}
+                      className="rounded-lg shadow-xl"
+                      style={{ maxWidth: '100%', height: 'auto' }}
+                    />
+                  </motion.div>
+                </div>
+              </motion.div>
+              
+              <motion.div
+                className="mt-4 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                <p className="text-slate-400 text-sm">
+                  Click outside or press ESC to close
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </main>
   )
 }
