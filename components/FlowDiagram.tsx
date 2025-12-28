@@ -4,21 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import AwsNode from './AwsNode'
 import AnimatedEdge from './AnimatedEdge'
-
-interface FlowStep {
-  id: string
-  label: string
-  status?: string
-  active: boolean
-}
-
-interface FlowDiagramProps {
-  isActive: boolean
-  onComplete: () => void
-  onStepChange?: (step: number, stepName: string, description: string) => void
-  manualControl?: boolean
-  currentStep?: number
-}
+import { FlowStep, FlowDiagramProps } from '@/types'
 
 export default function FlowDiagram({ isActive, onComplete, onStepChange, manualControl = false, currentStep: externalCurrentStep }: FlowDiagramProps) {
   const [internalCurrentStep, setInternalCurrentStep] = useState<number>(0)

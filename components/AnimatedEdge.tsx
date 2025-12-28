@@ -2,16 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-
-interface AnimatedEdgeProps {
-  x1: number
-  y1: number
-  x2: number
-  y2: number
-  isActive?: boolean
-  delay?: number
-  color?: string
-}
+import { AnimatedEdgeProps } from '@/types'
 
 export default function AnimatedEdge({
   x1,

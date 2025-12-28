@@ -2,18 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-
-interface AwsNodeProps {
-  id: string
-  label: string
-  iconSrc: string
-  iconAlt: string
-  x: number
-  y: number
-  isActive?: boolean
-  status?: string
-  glowColor?: string
-}
+import { AwsNodeProps } from '@/types'
 
 export default function AwsNode({
   id,

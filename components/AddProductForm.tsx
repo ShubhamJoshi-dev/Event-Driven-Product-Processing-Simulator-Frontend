@@ -2,23 +2,13 @@
 
 import { useState, FormEvent } from 'react'
 import { motion } from 'framer-motion'
-
-interface ProductData {
-  name: string
-  price: string
-  details: string
-}
-
-interface AddProductFormProps {
-  onSubmit: (data: ProductData) => void
-  isLoading: boolean
-}
+import { ProductFormData, AddProductFormProps } from '@/types'
 
 export default function AddProductForm({
   onSubmit,
   isLoading,
 }: AddProductFormProps) {
-  const [formData, setFormData] = useState<ProductData>({
+  const [formData, setFormData] = useState<ProductFormData>({
     name: '',
     price: '',
     details: '',

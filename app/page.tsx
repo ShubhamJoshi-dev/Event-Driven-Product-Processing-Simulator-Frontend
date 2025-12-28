@@ -5,26 +5,15 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import AddProductForm from '@/components/AddProductForm'
 import FlowDiagram from '@/components/FlowDiagram'
-
-interface ProductData {
-  product_id: string
-  product_name: string
-  product_price: number
-  product_description: string | number
-  created_at: string
-}
+import { ProductResponseData, StepInfo } from '@/types'
 
 export default function Home() {
   const [isFlowActive, setIsFlowActive] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [showDiagram, setShowDiagram] = useState(false)
-  const [productData, setProductData] = useState<ProductData | null>(null)
-  const [currentStepInfo, setCurrentStepInfo] = useState<{
-    step: number
-    name: string
-    description: string
-  } | null>(null)
+  const [productData, setProductData] = useState<ProductResponseData | null>(null)
+  const [currentStepInfo, setCurrentStepInfo] = useState<StepInfo | null>(null)
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -33,7 +22,7 @@ export default function Home() {
     return match ? match[1] : null
   }
 
-  const handleFormSubmit = async (data: { name: string; price: string; details: string }) => {
+  const handleFormSubmit = async (data: { name: string; price: string; details: string }): Promise<void> => {
     setIsLoading(true)
     setIsFlowActive(true)
     setShowSuccess(false)
